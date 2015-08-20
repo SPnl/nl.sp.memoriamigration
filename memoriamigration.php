@@ -6,6 +6,32 @@
 require_once 'memoriamigration.civix.php';
 
 
+/**
+ * Implementation of hook_civicrm_navigationMenu *
+ * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_navigationMenu
+ */
+function memoriamigration_civicrm_navigationMenu(&$params) {
+
+  foreach ($params as &$menu) {
+    if (array_key_exists('attributes', $menu) && $menu['attributes']['name'] == 'Administer') {
+
+      $maxKey = (max(array_keys($menu['child'])));
+      $menu['child'][$maxKey + 1] = [
+        'attributes' => [
+          'label'      => ts('Migratie Memoria'),
+          'name'       => ts('Migratie Memoria'),
+          'url'        => 'civicrm/admin/memoria',
+          'permission' => 'administer CiviCRM',
+          'operator'   => NULL,
+          'separator'  => NULL,
+          'parentID'   => 2,
+          'navID'      => $maxKey + 1,
+          'active'     => 1,
+        ],
+      ];
+    }
+  }
+}
 
 /* Default Civix hooks follow */
 
@@ -46,7 +72,7 @@ function memoriamigration_civicrm_caseTypes(&$caseTypes) {
 }
 
 function memoriamigration_civicrm_angularModules(&$angularModules) {
-_memoriamigration_civix_civicrm_angularModules($angularModules);
+  _memoriamigration_civix_civicrm_angularModules($angularModules);
 }
 
 function memoriamigration_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {

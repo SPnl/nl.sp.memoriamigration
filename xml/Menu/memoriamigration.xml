@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<menu>
+  <item>
+    <path>civicrm/admin/memoria</path>
+    <page_callback>CRM_Memoriamigration_Page_Dashboard</page_callback>
+    <title>Migratie Memoria</title>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/admin/memoria/do</path>
+    <page_callback>CRM_Memoriamigration_Page_Do</page_callback>
+    <title>Acties uitvoeren</title>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/admin/memoria/detail</path>
+    <page_callback>CRM_Memoriamigration_Page_Detail</page_callback>
+    <title>Details migratie</title>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/admin/memoria/settings</path>
+    <page_callback>CRM_Memoriamigration_Form_Settings</page_callback>
+    <title>Migratie-instellingen</title>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/admin/memoria/refresh</path>
+    <page_callback>CRM_Memoriamigration_Page_RefreshGroups</page_callback>
+    <title>Groepen verversen</title>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+</menu>

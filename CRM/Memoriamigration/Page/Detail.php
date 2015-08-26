@@ -16,7 +16,7 @@ class CRM_Memoriamigration_Page_Detail extends CRM_Core_Page {
       CRM_Utils_System::redirect(CRM_Utils_System::url('civicrm/admin/memoria'));
     }
 
-    CRM_Utils_System::setTitle(ts('Migratie ' . $group->usergroup_name));
+    CRM_Utils_System::setTitle(ts('Memoria-groep ' . $group->usergroup_name));
     $this->assign('group', $group);
 
     $memoria = CRM_Memoriamigration_Connector_Memoria::singleton();

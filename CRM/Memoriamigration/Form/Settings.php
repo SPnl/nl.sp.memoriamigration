@@ -8,7 +8,6 @@ require_once 'CRM/Core/Form.php';
  */
 class CRM_Memoriamigration_Form_Settings extends CRM_Core_Form {
 
-  private $extensionName = 'nl.sp.memoriamigration';
   private $myFields = [
     ['type' => 'text', 'name' => 'memoriamigr_dbhost', 'label' => 'Hostnaam', 'attributes' => [], 'required' => TRUE],
     ['type' => 'text', 'name' => 'memoriamigr_dbuser', 'label' => 'Gebruikersnaam', 'attributes' => [], 'required' => TRUE],
@@ -16,19 +15,19 @@ class CRM_Memoriamigration_Form_Settings extends CRM_Core_Form {
     ['type' => 'text', 'name' => 'memoriamigr_dbname', 'label' => 'Database', 'attributes' => [], 'required' => TRUE],
   ];
 
-  function buildQuickForm() {
+  public function buildQuickForm() {
 
     foreach ($this->myFields as $field) {
       $this->add($field['type'], $field['name'], $field['label'], $field['attributes'], $field['required']);
     }
 
-    $this->addButtons([['type' => 'submit', 'name' => 'Opslaan', 'isDefualt' => TRUE]]);
+    $this->addButtons([['type' => 'submit', 'name' => 'Opslaan', 'isDefault' => TRUE]]);
 
     $this->assign('elementNames', $this->getRenderableElementNames());
     parent::buildQuickForm();
   }
 
-  function setDefaultValues() {
+  public function setDefaultValues() {
 
     parent::setDefaultValues();
     foreach ($this->myFields as $field) {
@@ -37,7 +36,7 @@ class CRM_Memoriamigration_Form_Settings extends CRM_Core_Form {
     return $values;
   }
 
-  function postProcess() {
+  public function postProcess() {
     $values = $this->exportValues();
     foreach ($this->myFields as $field) {
       CRM_Core_BAO_Setting::setItem($values[$field['name']], $this->extensionName, $field['name']);
@@ -56,11 +55,7 @@ class CRM_Memoriamigration_Form_Settings extends CRM_Core_Form {
     CRM_Utils_System::redirect(CRM_Utils_System::url('civicrm/admin/memoria'));
   }
 
-  function getRenderableElementNames() {
-    // The _elements list includes some items which should not be
-    // auto-rendered in the loop -- such as "qfKey" and "buttons".  These
-    // items don't have labels.  We'll identify renderable by filtering on
-    // the 'label'.
+  private function getRenderableElementNames() {
     $elementNames = [];
     foreach ($this->_elements as $element) {
       /** @var HTML_QuickForm_Element $element */

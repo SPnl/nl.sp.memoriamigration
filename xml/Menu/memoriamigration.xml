@@ -7,15 +7,15 @@
     <access_arguments>administer CiviCRM</access_arguments>
   </item>
   <item>
-    <path>civicrm/admin/memoria/do</path>
-    <page_callback>CRM_Memoriamigration_Page_Do</page_callback>
-    <title>Acties uitvoeren</title>
+    <path>civicrm/admin/memoria/detail</path>
+    <page_callback>CRM_Memoriamigration_Page_Detail</page_callback>
+    <title>Details over groep</title>
     <access_arguments>administer CiviCRM</access_arguments>
   </item>
   <item>
-    <path>civicrm/admin/memoria/detail</path>
-    <page_callback>CRM_Memoriamigration_Page_Detail</page_callback>
-    <title>Details migratie</title>
+    <path>civicrm/admin/memoria/migrate</path>
+    <page_callback>CRM_Memoriamigration_Form_Migrate</page_callback>
+    <title>Migratie starten</title>
     <access_arguments>administer CiviCRM</access_arguments>
   </item>
   <item>

@@ -9,7 +9,7 @@
     <div class="label">{$form.$elementName.label}</div>
     <div class="content">{$form.$elementName.html}</div>
     <div class="clear"></div>
-  </div>w
+  </div>
 {/foreach}
 
 <div class="crm-submit-buttons">

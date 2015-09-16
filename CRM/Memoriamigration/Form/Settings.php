@@ -45,7 +45,7 @@ class CRM_Memoriamigration_Form_Settings extends CRM_Core_Form {
     CRM_Core_Session::setStatus('Migratie-instellingen opgeslagen', 'Migratie-instellingen', 'success');
 
     try {
-      $dbconn = CRM_Memoriamigration_Connector_Memoria::singleton();
+      $dbconn = CRM_Memoriamigration_Connector_Database::singleton();
       $dbconn->connect($values['memoriamigr_dbhost'], $values['memoriamigr_dbuser'], $values['memoriamigr_dbpass'], $values['memoriamigr_dbname']);
     } catch (\Exception $e) {
       CRM_Core_Session::setStatus('Kon niet verbinden met de database. Weet je zeker dat je de goede instellingen hebt ingevuld? (' . $e->getMessage() . ')', 'Migratie-instellingen', 'warning');

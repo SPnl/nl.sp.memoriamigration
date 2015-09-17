@@ -39,7 +39,7 @@ class CRM_Memoriamigration_Form_Settings extends CRM_Core_Form {
   public function postProcess() {
     $values = $this->exportValues();
     foreach ($this->myFields as $field) {
-      CRM_Core_BAO_Setting::setItem($values[$field['name']], $this->extensionName, $field['name']);
+      CRM_Memoriamigration_Config::set($field['name'], $values[$field['name']]);
     }
 
     CRM_Core_Session::setStatus('Migratie-instellingen opgeslagen', 'Migratie-instellingen', 'success');

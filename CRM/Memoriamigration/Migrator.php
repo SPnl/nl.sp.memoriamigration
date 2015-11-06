@@ -177,7 +177,7 @@ class CRM_Memoriamigration_Migrator {
       try {
         $ret = civicrm_api3('Group', 'create', [
           'name'  => $name,
-          'title' => $title,
+          'title' => substr($title, 0, 64),
         ]);
       } catch (\CiviCRM_API3_Exception $e) {
         $this->log("Could not create group (API error): " . $title . " (" . $name . ") - " . $e->getMessage());

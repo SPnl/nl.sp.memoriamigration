@@ -34,7 +34,9 @@ class CRM_Memoriamigration_Connector_Memoria {
       'memberCount'        => $this->getMemberCountForGroup($filterString),
       'migrateMemberCount' => $this->getMemberCountForGroup($filterString, TRUE),
       'propertyCount'      => $this->getPropertyCountForGroup($groupId),
+      'propertyUserCount'  => $this->getPropertyUserCountForGroup($groupId),
       'manselCount'        => $this->getManualSelectionCountForGroup($groupId),
+      'manselUserCount'    => $this->getManualSelectionUserCountForGroup($groupId),
       'commentCount'       => $this->getCommentCountForGroup($filterString),
       'changeCount'        => $this->getChangeCountForGroup($groupId),
     ];
@@ -126,9 +128,19 @@ class CRM_Memoriamigration_Connector_Memoria {
     return $properties->fetch_array()[0];
   }
 
+  public function getPropertyUserCountForGroup($groupId) {
+    $properties = $this->db->query("SELECT COUNT(*) FROM mem_propxuser x LEFT JOIN mem_proplist p ON x.property = p.id WHERE p.groep = '" . (int) $groupId . "'");
+    return $properties->fetch_array()[0];
+  }
+
   public function getManualSelectionsForGroup($groupId) {
     $selections = $this->db->query("SELECT * FROM mem_mansel WHERE groep = '" . (int) $groupId . "' ORDER BY name ASC");
     return $selections->fetch_all(MYSQLI_ASSOC);
+  }
+
+  public function getManualSelectionUserCountForGroup($groupId) {
+    $properties = $this->db->query("SELECT COUNT(*) FROM mem_manselxuser x LEFT JOIN mem_mansel m ON x.selid = m.id WHERE m.groep = '" . (int) $groupId . "'");
+    return $properties->fetch_array()[0];
   }
 
   public function getManualSelectionCountForGroup($groupId) {

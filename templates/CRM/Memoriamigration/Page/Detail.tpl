@@ -78,7 +78,7 @@
         <td>{$detail.migrateMemberCount}</td>
     </tr>
     <tr>
-        <td>Aantal leden met opmerkingen:</td>
+        <td>Leden met opmerkingen:</td>
         <td>{$detail.commentCount}</td>
     </tr>
     <tr>
@@ -86,8 +86,16 @@
         <td>{$detail.propertyCount}</td>
     </tr>
     <tr>
+        <td>Leden gekoppeld aan lokale eigenschappen:</td>
+        <td>{$detail.propertyUserCount}</td>
+    </tr>
+    <tr>
         <td>Aantal handmatige selecties:</td>
         <td>{$detail.manselCount}</td>
+    </tr>
+    <tr>
+        <td>Leden gekoppeld aan selecties:</td>
+        <td>{$detail.manselUserCount}</td>
     </tr>
     <tr>
         <td>Totaal aantal mutaties:</td>

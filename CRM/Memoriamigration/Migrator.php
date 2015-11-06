@@ -114,8 +114,9 @@ class CRM_Memoriamigration_Migrator {
 
     if (count($groupList) > 0) {
       foreach ($groupList as $groupItem) {
-        $newGroupId = $this->createGroup($parentGroup['short_name'] . ': ' . $groupItem['name'], $parentGroup['id']);
+        $newGroupId = $this->createGroup($parentGroup['short_name'] . ' ' . $groupItem['name'], 'Import: ' . $groupItem['name'], $parentGroup['id']);
         if (!$newGroupId) {
+          $this->log('Warning: no group id for group ' . $groupItem['name']);
           continue;
         }
         $groupMapping[$groupItem['id']] = $newGroupId;
@@ -142,7 +143,7 @@ class CRM_Memoriamigration_Migrator {
       $parentGroupId = $spgeo[$customFieldAfdGroepName];
     }
     else {
-      $parentGroupId = $this->createGroup($spgeo['display_name']);
+      $parentGroupId = $this->createGroup($spgeo['display_name'], $spgeo['display_name']);
       if ($parentGroupId) {
         civicrm_api3('Contact', 'create', [
           'contact_id'              => $geo_id,
@@ -156,14 +157,14 @@ class CRM_Memoriamigration_Migrator {
     }
 
     $parentGroup = civicrm_api3('Group', 'getsingle', ['id' => $parentGroupId]);
-    $parentGroup['short_name'] = str_replace(['SP-afdeling ', 'SP-regio ', 'SP-provincie ', 'SP-werkgroep '], '', $parentGroup['title']);
+    $parentGroup['short_name'] = str_replace(['SP-afdeling ', 'SP-regio ', 'SP-provincie ', 'SP-werkgroep ', 'Afdelingsgroepen '], '', $parentGroup['title']);
     // $this->log('Parent group data: ' . print_r($parentGroup, true));
     return $parentGroup;
   }
 
-  private function createGroup($title, $parentGroupId = NULL) {
-    $title = trim($title);
-    $name  = substr(strtolower(preg_replace('/[^a-zA-Z0-9\._-]/', '-', $title)), 0, 64);
+  private function createGroup($name, $title, $parentGroupId = NULL) {
+    $title = substr(trim($title), 0, 64);
+    $name  = substr(strtolower(preg_replace('/[^a-zA-Z0-9\._-]/', '-', trim($name))), 0, 64);
     $this->log('Creating group: name \'' . $name . '\', title \'' . $title . '\'' . ($parentGroupId ? ', parent id ' . $parentGroupId : ''));
 
     try {
@@ -177,7 +178,7 @@ class CRM_Memoriamigration_Migrator {
       try {
         $ret = civicrm_api3('Group', 'create', [
           'name'  => $name,
-          'title' => substr($title, 0, 64),
+          'title' => $title
         ]);
       } catch (\CiviCRM_API3_Exception $e) {
         $this->log("Could not create group (API error): " . $title . " (" . $name . ") - " . $e->getMessage());
@@ -196,7 +197,7 @@ class CRM_Memoriamigration_Migrator {
             'parent_group_id' => $parentGroupId,
           ]);
         } catch (\CiviCRM_API3_Exception $e) {
-          $this->log("Could not add set group parent (API error): " . $title . " (" . $name . ", parent id " . $parentGroupId . ") - " . $e->getMessage() . " - " . print_r($parentGroupId, TRUE));
+          $this->log("Could not set group parent (API error): " . $title . " (" . $name . ", parent id " . $parentGroupId . ") - " . $e->getMessage() . " - " . print_r($parentGroupId, TRUE));
         }
       }
 
@@ -235,8 +236,8 @@ class CRM_Memoriamigration_Migrator {
                 $setCustomDataProperties[] = $record['property'];
               }
               else {
-                // $this->log('Could not add property entry: property ' . $record['property'] . ' not mapped.');
                 // Niet per se erg -> kan ook betekenen dat iemand bijv in een landelijke selectie zit
+                $this->log('Could not add property entry: property ' . $record['property'] . ' not mapped.');
               }
             }
             if (count($setCustomDataProperties) > 0) {
@@ -250,7 +251,7 @@ class CRM_Memoriamigration_Migrator {
                 $this->addToGroup($regnr, $this->manselGroupMapping[$record['selid']]);
               }
               else {
-                // $this->log('Could not add mansel entry: selid ' . $record['selid'] . ' not mapped.');
+                $this->log('Could not add mansel entry: selid ' . $record['selid'] . ' not mapped.');
               }
             }
             break;
@@ -333,6 +334,7 @@ class CRM_Memoriamigration_Migrator {
 
   private function log($message) {
     $this->log[] = $message;
+    echo $message . "\n"; // For CLI use
   }
 
   private function getLog() {

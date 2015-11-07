@@ -91,11 +91,13 @@ class CRM_Memoriamigration_Migrator {
 
     $properties = $this->memoria->getPropertiesForGroup($this->mgroup['usergroup_id']);
     $this->propertyGroupMapping = $this->createAndMapGroups($properties);
+    // echo "Property mapping:\n" . print_r($this->propertyGroupMapping, true) . "\n";
 
     $this->log('importProperties: created ' . count($this->propertyGroupMapping) . ' groups.');
 
     $mansel = $this->memoria->getManualSelectionsForGroup($this->mgroup['usergroup_id']);
     $this->manselGroupMapping = $this->createAndMapGroups($mansel);
+    // echo "Mansel mapping:\n" . print_r($this->manselGroupMapping, true) . "\n";
 
     $this->log('importManualSelections: created ' . count($this->manselGroupMapping) . ' groups.');
 
@@ -165,16 +167,20 @@ class CRM_Memoriamigration_Migrator {
   private function createGroup($name, $title, $parentGroupId = NULL) {
     $title = substr(trim($title), 0, 64);
     $name  = substr(strtolower(preg_replace('/[^a-zA-Z0-9\._-]/', '-', trim($name))), 0, 64);
-    $this->log('Creating group: name \'' . $name . '\', title \'' . $title . '\'' . ($parentGroupId ? ', parent id ' . $parentGroupId : ''));
 
     try {
       // Check if group exists and if so, return group ID
-      return civicrm_api3('Group', 'getvalue', [
+      $groupId = civicrm_api3('Group', 'getvalue', [
         'name'   => $name,
         'return' => 'id',
       ]);
+      $this->log('Group exists: name \'' . $name . '\'' . ($parentGroupId ? ', parent id ' . $parentGroupId : ''));
+      return $groupId;
+
     } catch (\CiviCRM_API3_Exception $e) {
       // Otherwise, create group
+      $this->log('Creating group: name \'' . $name . '\', title \'' . $title . '\'' . ($parentGroupId ? ', parent id ' . $parentGroupId : ''));
+
       try {
         $ret = civicrm_api3('Group', 'create', [
           'name'  => $name,
@@ -237,7 +243,7 @@ class CRM_Memoriamigration_Migrator {
               }
               else {
                 // Niet per se erg -> kan ook betekenen dat iemand bijv in een landelijke selectie zit
-                $this->log('Could not add property entry: property ' . $record['property'] . ' not mapped.');
+                $this->log("Could not add property {$record['property']} to {$regnr}: not mapped.");
               }
             }
             if (count($setCustomDataProperties) > 0) {
@@ -247,11 +253,11 @@ class CRM_Memoriamigration_Migrator {
 
           case 'mansel':
             foreach ($records as $record) {
-              if (in_array($record['selid'], $this->manselGroupMapping)) {
+              if (array_key_exists($record['selid'], $this->manselGroupMapping)) {
                 $this->addToGroup($regnr, $this->manselGroupMapping[$record['selid']]);
               }
               else {
-                $this->log('Could not add mansel entry: selid ' . $record['selid'] . ' not mapped.');
+                $this->log("Could not add mansel entry {$record['selid']} to {$regnr}: not mapped.");
               }
             }
             break;

@@ -11,8 +11,6 @@
  */
 function civicrm_api3_memoria_migration_run($params = []) {
 
-  // return civicrm_api3_create_success(['message' => 'Call disabled while not working on it.']);
-
   $migrationData = CRM_Memoriamigration_Connector_MigrationData::singleton();
 
   $groups = $migrationData->getMigrationGroupsByStatus('queued', 999);

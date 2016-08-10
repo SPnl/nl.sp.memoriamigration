@@ -135,7 +135,8 @@ class CRM_Memoriamigration_Migrator {
       return FALSE;
     }
 
-    $customFieldAfdGroep = civicrm_api3('CustomField', 'getvalue', ['name' => 'afdeling_groep', 'return' => 'id']);
+    $spgf = CRM_Spgeneric_CustomField::singleton();
+    $customFieldAfdGroep = $spgf->getFieldId('afdeling_groep', 'afdeling_groep');
     $customFieldAfdGroepName = 'custom_' . $customFieldAfdGroep;
     $params = ['contact_id' => $geo_id, 'return'     => 'contact_id,display_name,' . $customFieldAfdGroepName];
     $spgeo = civicrm_api3('Contact', 'getsingle', $params);

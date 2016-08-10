@@ -103,25 +103,21 @@ class CRM_Memoriamigration_Config {
       52   => ['activiteiten', 'Wijkcontactpersoon'],
     ];
 
+    $spgf = CRM_Spgeneric_CustomField::singleton();
+
     $customGroups = [
-      // 'actief_land' => civicrm_api3('CustomGroup', 'getsingle', ['name' => 'Landelijk_actief']),
-      'actief_afd' => civicrm_api3('CustomGroup', 'getsingle', ['name' => 'Actief_SP']),
-      'werk_interesses' => civicrm_api3('CustomGroup', 'getsingle', ['name' => 'SP_kenmerken']),
+      // 'actief_land' => $spgf->getGroupByName('Landelijk_actief'),
+      'actief_afd' => $spgf->getGroupByName('Actief_SP'),
+      'werk_interesses' => $spgf->getGroupByName('SP_kenmerken'),
     ];
 
     $customFields = [
-      'bedrijfstak'  => civicrm_api3('CustomField', 'getsingle',
-        ['name' => 'Bedrijfstak', 'custom_group_id' => $customGroups['werk_interesses']['id']]),
-      'beroepsgroep' => civicrm_api3('CustomField', 'getsingle',
-        ['name' => 'Beroepsgroep', 'custom_group_id' => $customGroups['werk_interesses']['id']]),
-      'hoofdtaak'    => civicrm_api3('CustomField', 'getsingle',
-        ['name' => 'Hoofdtaak', 'custom_group_id' => $customGroups['werk_interesses']['id']]),
-      'lid_van'      => civicrm_api3('CustomField', 'getsingle',
-        ['name' => 'Lid_van', 'custom_group_id' => $customGroups['werk_interesses']['id']]),
-      'actief'       => civicrm_api3('CustomField', 'getsingle',
-        ['name' => 'Actief', 'custom_group_id' => $customGroups['actief_afd']['id']]),
-      'activiteiten' => civicrm_api3('CustomField', 'getsingle',
-        ['name' => 'Activiteiten', 'custom_group_id' => $customGroups['actief_afd']['id']]),
+      'bedrijfstak'  => $spgf->getField('SP_kenmerken', 'Bedrijfstak'),
+      'beroepsgroep' => $spgf->getField('SP_kenmerken', 'Beroepsgroep'),
+      'hoofdtaak'    => $spgf->getField('SP_kenmerken', 'Hoofdtaak'),
+      'lid_van'      => $spgf->getField('SP_kenmerken', 'Lid_van'),
+      'actief'       => $spgf->getField('Actief_SP', 'Actief'),
+      'activiteiten' => $spgf->getField('Actief_SP', 'Activiteiten'),
     ];
 
     foreach($customFields as &$customField) {

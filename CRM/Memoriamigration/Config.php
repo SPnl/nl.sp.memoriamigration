@@ -103,13 +103,25 @@ class CRM_Memoriamigration_Config {
       52   => ['activiteiten', 'Wijkcontactpersoon'],
     ];
 
+    $customGroups = [
+      // 'actief_land' => civicrm_api3('CustomGroup', 'getsingle', ['name' => 'Landelijk_actief']),
+      'actief_afd' => civicrm_api3('CustomGroup', 'getsingle', ['name' => 'Actief_SP']),
+      'werk_interesses' => civicrm_api3('CustomGroup', 'getsingle', ['name' => 'SP_kenmerken']),
+    ];
+
     $customFields = [
-      'bedrijfstak'  => civicrm_api3('CustomField', 'getsingle', ['name' => 'Bedrijfstak']),
-      'beroepsgroep' => civicrm_api3('CustomField', 'getsingle', ['name' => 'Beroepsgroep']),
-      'hoofdtaak'    => civicrm_api3('CustomField', 'getsingle', ['name' => 'Hoofdtaak']),
-      'lid_van'      => civicrm_api3('CustomField', 'getsingle', ['name' => 'Lid_van']),
-      'actief'       => civicrm_api3('CustomField', 'getsingle', ['name' => 'Actief']),
-      'activiteiten' => civicrm_api3('CustomField', 'getsingle', ['name' => 'Activiteiten']),
+      'bedrijfstak'  => civicrm_api3('CustomField', 'getsingle',
+        ['name' => 'Bedrijfstak', 'custom_group_id' => $customGroups['werk_interesses']['id']]),
+      'beroepsgroep' => civicrm_api3('CustomField', 'getsingle',
+        ['name' => 'Beroepsgroep', 'custom_group_id' => $customGroups['werk_interesses']['id']]),
+      'hoofdtaak'    => civicrm_api3('CustomField', 'getsingle',
+        ['name' => 'Hoofdtaak', 'custom_group_id' => $customGroups['werk_interesses']['id']]),
+      'lid_van'      => civicrm_api3('CustomField', 'getsingle',
+        ['name' => 'Lid_van', 'custom_group_id' => $customGroups['werk_interesses']['id']]),
+      'actief'       => civicrm_api3('CustomField', 'getsingle',
+        ['name' => 'Actief', 'custom_group_id' => $customGroups['actief_afd']['id']]),
+      'activiteiten' => civicrm_api3('CustomField', 'getsingle',
+        ['name' => 'Activiteiten', 'custom_group_id' => $customGroups['actief_afd']['id']]),
     ];
 
     foreach($customFields as &$customField) {
